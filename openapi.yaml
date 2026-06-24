@@ -1,0 +1,87 @@
+openapi: 3.0.1
+info:
+  title: Task Assistant API
+  description: >-
+    Chat endpoint for the AI task-assistant agent. Send a natural-language
+    message and the agent manages an in-memory to-do list (add/list tasks,
+    plan a schedule) using its tools.
+  version: 0.1.0
+servers:
+  - url: http://localhost:8084
+paths:
+  /chat:
+    post:
+      summary: Send a chat message to the task assistant
+      operationId: chat
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChatReqMessage'
+            examples:
+              listTasks:
+                summary: List all tasks
+                value:
+                  sessionId: s1
+                  message: List all my tasks
+              addTask:
+                summary: Add a task
+                value:
+                  sessionId: s1
+                  message: Add a task to call the dentist tomorrow
+      responses:
+        '200':
+          description: The agent's reply.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChatRespMessage'
+              example:
+                message: You have 1 task - "Buy groceries", due in 5 minutes.
+        '500':
+          description: Internal error while running the agent.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorPayload'
+components:
+  schemas:
+    ChatReqMessage:
+      type: object
+      required:
+        - sessionId
+        - message
+      properties:
+        sessionId:
+          type: string
+          description: Conversation/session identifier used for memory continuity.
+        message:
+          type: string
+          description: The user's natural-language message to the agent.
+      additionalProperties: false
+    ChatRespMessage:
+      type: object
+      required:
+        - message
+      properties:
+        message:
+          type: string
+          description: The agent's natural-language response.
+      additionalProperties: false
+    ErrorPayload:
+      type: object
+      properties:
+        timestamp:
+          type: string
+        status:
+          type: integer
+          format: int64
+        reason:
+          type: string
+        message:
+          type: string
+        path:
+          type: string
+        method:
+          type: string
