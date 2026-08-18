@@ -10,7 +10,7 @@ configurable string openAiApiKey = ?;
 
 // Declare a service attached to an `ai:Listener` listener 
 // to interact with the agent.
-service /tasks on new ai:Listener(8084) {
+service /tasks on new ai:Listener(8085) {
     resource function post chat(@http:Payload ai:ChatReqMessage request) 
 						returns ai:ChatRespMessage|error {
         string response = check taskAssistantAgent.run(request.message, request.sessionId);
