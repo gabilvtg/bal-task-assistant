@@ -1,6 +1,6 @@
 [package]
-org = "hansi"
-name = "hansi"
+org = "gbl"
+name = "task_assistant"
 version = "0.1.0"
 distribution = "2201.13.4"
 
